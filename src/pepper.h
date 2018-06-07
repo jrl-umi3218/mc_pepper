@@ -13,7 +13,7 @@ namespace mc_robots
   struct MC_ROBOTS_DLLAPI PepperRobotModule : public mc_rbdyn::RobotModule
   {
   public:
-    PepperRobotModule();
+    PepperRobotModule(bool load_ffb);
 
   protected:
     void readUrdf(const std::string & robotName, const std::vector<std::string> & filteredLinks);
@@ -35,4 +35,17 @@ namespace mc_robots
   };
 }
 
-ROBOT_MODULE_DEFAULT_CONSTRUCTOR("pepper", mc_robots::PepperRobotModule)
+extern "C"
+{
+  ROBOT_MODULE_API std::vector<std::string> MC_RTC_ROBOT_MODULE() { return {"pepper", "pepper_ffb"}; }
+  ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr) { delete ptr; }
+  ROBOT_MODULE_API mc_rbdyn::RobotModule * create(const std::string & robot)
+  {
+    if(robot == "pepper") { return new mc_robots::PepperRobotModule(false); }
+    else if(robot == "pepper_ffb") { return new mc_robots::PepperRobotModule(true); }
+    else
+    {
+      LOG_ERROR_AND_THROW(std::runtime_error, "Attempted to load " << robot << " from pepper module")
+    }
+  }
+}

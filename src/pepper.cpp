@@ -14,7 +14,7 @@ namespace mc_rtc
 
 namespace mc_robots
 {
-PepperRobotModule::PepperRobotModule()
+PepperRobotModule::PepperRobotModule(bool load_ffb)
  : RobotModule(mc_rtc::PEPPER_DESCRIPTION_PATH, "pepper")
  {
 
@@ -140,7 +140,14 @@ PepperRobotModule::PepperRobotModule()
 
   
   /* Read URDF file */
-  readUrdf("pepper", filteredLinks);
+  if(!load_ffb)
+  {
+    readUrdf("pepper", filteredLinks);
+  }
+  else
+  {
+    readUrdf("pepper_ffb", {});
+  }
 
   auto fileByBodyName = stdCollisionsFiles(mb);
   _convexHull = getConvexHull(fileByBodyName);
