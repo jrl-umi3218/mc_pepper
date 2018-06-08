@@ -146,6 +146,8 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   }
   else
   {
+    std::vector<std::string> extraJoints {"Trans_Y", "Trans_X", "Rot_Z"};
+    _ref_joint_order.insert(_ref_joint_order.begin(), extraJoints.begin(), extraJoints.end());
     readUrdf("pepper_ffb", {});
   }
 
