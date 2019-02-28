@@ -23,12 +23,11 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
 
   /* Virtual links */
  	virtualLinks.push_back("base_link");
-  virtualLinks.push_back("base_footprint");
+  virtualLinks.push_back("HipOffset");
   virtualLinks.push_back("SonarBack_frame");
   virtualLinks.push_back("CameraBottom_optical_frame");
   virtualLinks.push_back("CameraDepth_optical_frame");
   virtualLinks.push_back("LHandTouchBack_frame");
-  virtualLinks.push_back("CameraBottom_optical_frame");
   virtualLinks.push_back("VerticalLeftLaser_frame");
   virtualLinks.push_back("SurroundingFrontLaser_device_frame");
   virtualLinks.push_back("BumperB_frame");
@@ -53,49 +52,10 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   virtualLinks.push_back("ImuTorsoGyrometer_frame");
   virtualLinks.push_back("Tablet_frame");
   virtualLinks.push_back("HeadTouchRear_frame");
+  virtualLinks.push_back("BumperFR_frame");
   virtualLinks.push_back("SurroundingFrontLaser_frame");
   virtualLinks.push_back("ChestButton_frame");
   virtualLinks.push_back("HeadTouchMiddle_frame");
-  virtualLinks.push_back("BumperFL_frame");
-
-  /* Left hand fingers */
-  /*filteredLinks.push_back("LFinger21_link");
-  filteredLinks.push_back("LFinger22_link");
-  filteredLinks.push_back("LFinger23_link");
-  filteredLinks.push_back("LFinger11_link");
-  filteredLinks.push_back("LFinger12_link");
-  filteredLinks.push_back("LFinger13_link");
-  filteredLinks.push_back("LFinger31_link");
-  filteredLinks.push_back("LFinger32_link");
-  filteredLinks.push_back("LFinger33_link");
-  filteredLinks.push_back("LFinger41_link");
-  filteredLinks.push_back("LFinger42_link");
-  filteredLinks.push_back("LFinger43_link");
-  filteredLinks.push_back("LThumb1_link");
-  filteredLinks.push_back("LThumb2_link");*/
-
-  /* Right hand fingers */
-  /*filteredLinks.push_back("RFinger21_link");
-  filteredLinks.push_back("RFinger22_link");
-  filteredLinks.push_back("RFinger23_link");
-  filteredLinks.push_back("RFinger11_link");
-  filteredLinks.push_back("RFinger12_link");
-  filteredLinks.push_back("RFinger13_link");
-  filteredLinks.push_back("RFinger31_link");
-  filteredLinks.push_back("RFinger32_link");
-  filteredLinks.push_back("RFinger33_link");
-  filteredLinks.push_back("RFinger41_link");
-  filteredLinks.push_back("RFinger42_link");
-  filteredLinks.push_back("RFinger43_link");
-  filteredLinks.push_back("RThumb1_link");
-  filteredLinks.push_back("RThumb2_link");*/
-
-  /* Wheels */
-  filteredLinks.push_back("WheelFL_link");
-  filteredLinks.push_back("WheelB_link");
-  filteredLinks.push_back("WheelFR_link");
-  //filteredLinks.push_back("r_gripper");
-  //filteredLinks.push_back("l_gripper");
 
 
   /* Init joint values in degrees */
@@ -113,7 +73,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
  	halfSitting["LWristYaw"] = { -46.0 };
  	halfSitting["RWristYaw"] = { 46.0 };
  	halfSitting["HipRoll"] = { 0.0 };
- 	halfSitting["HipPitch"] = { -59.5 };
+ 	halfSitting["HipPitch"] = { -58.0 };
  	halfSitting["KneePitch"] = { 29.0 };
   halfSitting["RHand"] = { 0.0 };
 
@@ -129,7 +89,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
  	"LElbowYaw",
  	"LElbowRoll",
  	"LWristYaw",
-  	"LHand",
+  "LHand",
  	"RShoulderPitch",
  	"RShoulderRoll",
  	"RElbowYaw",
@@ -162,22 +122,22 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
 
   
   _minimalSelfCollisions = {
-    mc_rbdyn::Collision("torso", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("RBicep", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("RForeArm", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("r_wrist", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("LBicep", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("LForeArm", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("l_wrist", "Head", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("RForeArm", "torso", 0.02, 0.01, 0.), 
-    mc_rbdyn::Collision("r_wrist", "torso", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("LForeArm", "torso", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("l_wrist", "torso", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("RForeArm", "Pelvis", 0.02, 0.01, 0.), 
-    mc_rbdyn::Collision("r_wrist", "Pelvis", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("LForeArm", "Pelvis", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("l_wrist", "Pelvis", 0.02, 0.01, 0.),
-    mc_rbdyn::Collision("l_wrist", "r_wrist", 0.02, 0.01, 0.) 
+    mc_rbdyn::Collision("torso", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("RBicep", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("RForeArm", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("r_wrist", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("LBicep", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("LForeArm", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("l_wrist", "Head", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("RForeArm", "torso", 0.03, 0.01, 0.), 
+    mc_rbdyn::Collision("r_wrist", "torso", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("LForeArm", "torso", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("l_wrist", "torso", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("RForeArm", "Pelvis", 0.03, 0.01, 0.), 
+    mc_rbdyn::Collision("r_wrist", "Pelvis", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("LForeArm", "Pelvis", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("l_wrist", "Pelvis", 0.03, 0.01, 0.),
+    mc_rbdyn::Collision("l_wrist", "r_wrist", 0.03, 0.01, 0.) 
   };
 
   _commonSelfCollisions = _minimalSelfCollisions;
@@ -207,7 +167,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
       std::stringstream urdf;
       urdf << ifs.rdbuf();
       /* Consider robot as fixed base for now with root at base_footprint */
-      mc_rbdyn_urdf::URDFParserResult res = mc_rbdyn_urdf::rbdyn_from_urdf(urdf.str(), true, filteredLinks, true, "base_footprint");
+      mc_rbdyn_urdf::URDFParserResult res = mc_rbdyn_urdf::rbdyn_from_urdf(urdf.str(), false, filteredLinks);
       mb = res.mb;
       mbc = res.mbc;
       mbg = res.mbg;
