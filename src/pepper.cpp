@@ -1,21 +1,17 @@
 #include "pepper.h"
 #include <boost/filesystem.hpp>
 namespace bfs = boost::filesystem;
-#include <mc_rtc/config.h>
 #include <mc_rtc/logging.h>
 
 #include <boost/algorithm/string.hpp>
 #include <fstream>
 
-namespace mc_rtc
-{
-  static std::string PEPPER_DESCRIPTION_PATH = PEPPER_DESCRIPTION_PATH_IN;
-}
+#include "config.h"
 
 namespace mc_robots
 {
 PepperRobotModule::PepperRobotModule(bool load_ffb)
- : RobotModule(mc_rtc::PEPPER_DESCRIPTION_PATH, "pepper")
+ : RobotModule(PEPPER_DESCRIPTION_PATH, "pepper")
  {
 
   /* Path to surface descriptions */
@@ -23,39 +19,35 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
 
   /* Virtual links */
  	virtualLinks.push_back("base_link");
-  virtualLinks.push_back("HipOffset");
-  virtualLinks.push_back("SonarBack_frame");
-  virtualLinks.push_back("CameraBottom_optical_frame");
-  virtualLinks.push_back("CameraDepth_optical_frame");
-  virtualLinks.push_back("LHandTouchBack_frame");
-  virtualLinks.push_back("VerticalLeftLaser_frame");
-  virtualLinks.push_back("SurroundingFrontLaser_device_frame");
-  virtualLinks.push_back("BumperB_frame");
-  virtualLinks.push_back("SurroundingLeftLaser_frame");
-  virtualLinks.push_back("ShovelLaser_frame");
-  virtualLinks.push_back("ImuTorsoAccelerometer_frame");
-  virtualLinks.push_back("RSpeaker_frame");
-  virtualLinks.push_back("SurroundingRightLaser_device_frame");
-  virtualLinks.push_back("LSpeaker_frame");
-  virtualLinks.push_back("RHandTouchBack_frame");
+  virtualLinks.push_back("r_gripper");
+  virtualLinks.push_back("l_gripper");
+  virtualLinks.push_back("WheelFL_link");
+  virtualLinks.push_back("WheelFR_link");
+  virtualLinks.push_back("WheelB_link");
   virtualLinks.push_back("CameraTop_frame");
-  virtualLinks.push_back("SurroundingLeftLaser_device_frame");
-  virtualLinks.push_back("CameraDepth_frame");
-  virtualLinks.push_back("SurroundingRightLaser_frame");
-  virtualLinks.push_back("HeadTouchFront_frame");
-  virtualLinks.push_back("VerticalRightLaser_frame");
-  virtualLinks.push_back("SonarFront_frame");
-  virtualLinks.push_back("BumperFL_frame");
-  virtualLinks.push_back("CameraBottom_frame");
   virtualLinks.push_back("CameraTop_optical_frame");
-  virtualLinks.push_back("ImuBaseAccelerometer_frame");
-  virtualLinks.push_back("ImuTorsoGyrometer_frame");
-  virtualLinks.push_back("Tablet_frame");
-  virtualLinks.push_back("HeadTouchRear_frame");
-  virtualLinks.push_back("BumperFR_frame");
-  virtualLinks.push_back("SurroundingFrontLaser_frame");
-  virtualLinks.push_back("ChestButton_frame");
-  virtualLinks.push_back("HeadTouchMiddle_frame");
+  virtualLinks.push_back("RFinger41_link");
+  virtualLinks.push_back("RFinger12_link");
+  virtualLinks.push_back("RFinger31_link");
+  virtualLinks.push_back("RFinger32_link");
+  virtualLinks.push_back("RFinger22_link");
+  virtualLinks.push_back("RFinger13_link");
+  virtualLinks.push_back("RFinger21_link");
+  virtualLinks.push_back("RFinger11_link");
+  virtualLinks.push_back("RFinger43_link");
+  virtualLinks.push_back("RFinger42_link");
+  virtualLinks.push_back("RFinger33_link");
+  virtualLinks.push_back("LFinger41_link");
+  virtualLinks.push_back("LFinger12_link");
+  virtualLinks.push_back("LFinger31_link");
+  virtualLinks.push_back("LFinger32_link");
+  virtualLinks.push_back("LFinger22_link");
+  virtualLinks.push_back("LFinger13_link");
+  virtualLinks.push_back("LFinger21_link");
+  virtualLinks.push_back("LFinger11_link");
+  virtualLinks.push_back("LFinger43_link");
+  virtualLinks.push_back("LFinger42_link");
+  virtualLinks.push_back("LFinger33_link");
 
 
   /* Init joint values in degrees */
@@ -98,7 +90,6 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
  	"RHand"
   };
 
-  
   /* Read URDF file */
   if(!load_ffb)
   {
@@ -107,11 +98,20 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   else
   {
     std::vector<std::string> extraJoints {"Trans_Y", "Trans_X", "Rot_Z"};
+    std::vector<double> mobileBase_velMax {0.35, 0.35, 1.0};
     _ref_joint_order.insert(_ref_joint_order.begin(), extraJoints.begin(), extraJoints.end());
     halfSitting["Trans_Y"] = {0};
     halfSitting["Trans_X"] = {0};
     halfSitting["Rot_Z"] = {0};
     readUrdf("pepper_ffb", {});
+    // modify limits for extraJoints
+    for(unsigned i=0;i<extraJoints.size();i++){
+      auto jn = extraJoints[i];
+      limits.lower[jn] = {-INFINITY};
+      limits.upper[jn] = {INFINITY};
+      limits.torque[jn] = {INFINITY};
+      limits.velocity[jn] = {mobileBase_velMax[i]};
+    }
   }
 
   auto fileByBodyName = stdCollisionsFiles(mb);
@@ -120,7 +120,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   _bounds = nominalBounds(limits);
   _stance = halfSittingPose(mb);
 
-  
+
   _minimalSelfCollisions = {
     mc_rbdyn::Collision("torso", "Head", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("RBicep", "Head", 0.03, 0.01, 0.),
@@ -129,15 +129,15 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
     mc_rbdyn::Collision("LBicep", "Head", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("LForeArm", "Head", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("l_wrist", "Head", 0.03, 0.01, 0.),
-    mc_rbdyn::Collision("RForeArm", "torso", 0.03, 0.01, 0.), 
+    mc_rbdyn::Collision("RForeArm", "torso", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("r_wrist", "torso", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("LForeArm", "torso", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("l_wrist", "torso", 0.03, 0.01, 0.),
-    mc_rbdyn::Collision("RForeArm", "Pelvis", 0.03, 0.01, 0.), 
+    mc_rbdyn::Collision("RForeArm", "Pelvis", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("r_wrist", "Pelvis", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("LForeArm", "Pelvis", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("l_wrist", "Pelvis", 0.03, 0.01, 0.),
-    mc_rbdyn::Collision("l_wrist", "r_wrist", 0.03, 0.01, 0.) 
+    mc_rbdyn::Collision("l_wrist", "r_wrist", 0.03, 0.01, 0.)
   };
 
   _commonSelfCollisions = _minimalSelfCollisions;
@@ -154,7 +154,6 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "RThumb2_link", 0.02, 0.01, 0.));
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "RFinger23_link", 0.02, 0.01, 0.));
 
-
  }
 
 
@@ -166,8 +165,8 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
     {
       std::stringstream urdf;
       urdf << ifs.rdbuf();
-      /* Consider robot as fixed base for now with root at base_footprint */
-      mc_rbdyn_urdf::URDFParserResult res = mc_rbdyn_urdf::rbdyn_from_urdf(urdf.str(), false, filteredLinks);
+      /* Consider robot as fixed base for now (even for ffb model) */
+      mc_rbdyn_urdf::URDFParserResult res = mc_rbdyn_urdf::rbdyn_from_urdf(urdf.str(), true, filteredLinks);
       mb = res.mb;
       mbc = res.mbc;
       mbg = res.mbg;
@@ -216,7 +215,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
       bfs::path fpath = bfs::path(convexPath)/(f.second.second+"-ch.txt");
       if (bfs::exists(fpath))
       {
-       res[f.first] = std::pair<std::string, std::string>(f.second.first, convexPath + f.second.second + "-ch.txt"); 
+       res[f.first] = std::pair<std::string, std::string>(f.second.first, convexPath + f.second.second + "-ch.txt");
       }
     }
     return res;
