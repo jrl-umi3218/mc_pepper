@@ -16,7 +16,7 @@ namespace mc_robots
     PepperRobotModule(bool load_ffb);
 
   protected:
-    void readUrdf(const std::string & robotName, const std::vector<std::string> & filteredLinks);
+    void readUrdf(const std::string & robotName, bool fixed, const std::vector<std::string> & filteredLinks);
     std::map<std::string, std::vector<double>> halfSittingPose(const rbd::MultiBody & mb) const;
     std::vector< std::map<std::string, std::vector<double> > > nominalBounds(const mc_rbdyn_urdf::Limits & limits) const;
     virtual const std::vector< std::map<std::string, std::vector<double> > > & bounds() const;
