@@ -48,6 +48,41 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   virtualLinks.push_back("LFinger43_link");
   virtualLinks.push_back("LFinger42_link");
   virtualLinks.push_back("LFinger33_link");
+  virtualLinks.push_back("RThumb2_link");
+  virtualLinks.push_back("LThumb2_link");
+  virtualLinks.push_back("RThumb1_link");
+  virtualLinks.push_back("LThumb1_link");
+  virtualLinks.push_back("RFinger23_link");
+  virtualLinks.push_back("LFinger23_link");
+
+  filteredLinks.push_back("RFinger41_link");
+  filteredLinks.push_back("RFinger12_link");
+  filteredLinks.push_back("RFinger31_link");
+  filteredLinks.push_back("RFinger32_link");
+  filteredLinks.push_back("RFinger22_link");
+  filteredLinks.push_back("RFinger13_link");
+  filteredLinks.push_back("RFinger21_link");
+  filteredLinks.push_back("RFinger11_link");
+  filteredLinks.push_back("RFinger43_link");
+  filteredLinks.push_back("RFinger42_link");
+  filteredLinks.push_back("RFinger33_link");
+  filteredLinks.push_back("LFinger41_link");
+  filteredLinks.push_back("LFinger12_link");
+  filteredLinks.push_back("LFinger31_link");
+  filteredLinks.push_back("LFinger32_link");
+  filteredLinks.push_back("LFinger22_link");
+  filteredLinks.push_back("LFinger13_link");
+  filteredLinks.push_back("LFinger21_link");
+  filteredLinks.push_back("LFinger11_link");
+  filteredLinks.push_back("LFinger43_link");
+  filteredLinks.push_back("LFinger42_link");
+  filteredLinks.push_back("LFinger33_link");
+  filteredLinks.push_back("RFinger23_link");
+  filteredLinks.push_back("LFinger23_link");
+  filteredLinks.push_back("RThumb2_link");
+  filteredLinks.push_back("LThumb2_link");
+  filteredLinks.push_back("RThumb1_link");
+  filteredLinks.push_back("LThumb1_link");
 
 
   /* Init joint values in degrees */
@@ -93,17 +128,21 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   /* Read URDF file */
   if(!load_ffb)
   {
-    readUrdf("pepper", filteredLinks);
+    readUrdf("pepper", true, filteredLinks);
   }
   else
   {
-    std::vector<std::string> extraJoints {"Trans_Y", "Trans_X", "Rot_Z"};
+    readUrdf("pepper", false, filteredLinks);
+
+    /* Discarding extraJoints based solution for mobile base actuation (see below) */
+
+    /*std::vector<std::string> extraJoints {"Trans_Y", "Trans_X", "Rot_Z"};
     std::vector<double> mobileBase_velMax {0.35, 0.35, 1.0};
     _ref_joint_order.insert(_ref_joint_order.begin(), extraJoints.begin(), extraJoints.end());
     halfSitting["Trans_Y"] = {0};
     halfSitting["Trans_X"] = {0};
     halfSitting["Rot_Z"] = {0};
-    readUrdf("pepper_ffb", {});
+    readUrdf("pepper_ffb", filteredLinks);
     // modify limits for extraJoints
     for(unsigned i=0;i<extraJoints.size();i++){
       auto jn = extraJoints[i];
@@ -111,13 +150,14 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
       limits.upper[jn] = {INFINITY};
       limits.torque[jn] = {INFINITY};
       limits.velocity[jn] = {mobileBase_velMax[i]};
-    }
+    }*/
   }
 
   auto fileByBodyName = stdCollisionsFiles(mb);
   _convexHull = getConvexHull(fileByBodyName);
 
   _bounds = nominalBounds(limits);
+
   _stance = halfSittingPose(mb);
 
 
@@ -141,7 +181,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   };
 
   _commonSelfCollisions = _minimalSelfCollisions;
-  _commonSelfCollisions.push_back(mc_rbdyn::Collision("Head", "LThumb2_link", 0.02, 0.01, 0.));
+  /*_commonSelfCollisions.push_back(mc_rbdyn::Collision("Head", "LThumb2_link", 0.02, 0.01, 0.));
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Head", "LFinger23_link", 0.02, 0.01, 0.));
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Head", "RThumb2_link", 0.02, 0.01, 0.));
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Head", "RFinger23_link", 0.02, 0.01, 0.));
@@ -152,12 +192,14 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "LThumb2_link", 0.02, 0.01, 0.));
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "LFinger23_link", 0.02, 0.01, 0.));
   _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "RThumb2_link", 0.02, 0.01, 0.));
-  _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "RFinger23_link", 0.02, 0.01, 0.));
+  _commonSelfCollisions.push_back(mc_rbdyn::Collision("Pelvis", "RFinger23_link", 0.02, 0.01, 0.));*/
 
  }
 
 
- void PepperRobotModule::readUrdf(const std::string & robotName, const std::vector<std::string> & filteredLinks)
+ void PepperRobotModule::readUrdf(const std::string & robotName,
+                                     bool fixed,
+                                     const std::vector<std::string> & filteredLinks)
   {
     std::string urdfPath = path + "/urdf/" + robotName + ".urdf";
     std::ifstream ifs(urdfPath);
@@ -166,7 +208,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
       std::stringstream urdf;
       urdf << ifs.rdbuf();
       /* Consider robot as fixed base for now (even for ffb model) */
-      mc_rbdyn_urdf::URDFParserResult res = mc_rbdyn_urdf::rbdyn_from_urdf(urdf.str(), true, filteredLinks);
+      mc_rbdyn_urdf::URDFParserResult res = mc_rbdyn_urdf::rbdyn_from_urdf(urdf.str(), fixed, filteredLinks);
       mb = res.mb;
       mbc = res.mbc;
       mbg = res.mbg;
