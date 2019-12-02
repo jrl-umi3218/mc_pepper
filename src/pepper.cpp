@@ -310,20 +310,4 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
     return res;
   }
 
-  const std::map<std::string, std::pair<std::string, std::string> > & PepperRobotModule::convexHull() const
-  {
-    return _convexHull;
-  }
-
-
-  const std::vector< std::map<std::string, std::vector<double> > > & PepperRobotModule::bounds() const
-  {
-    return _bounds;
-  }
-
-  const std::map<std::string, std::vector<double> > & PepperRobotModule::stance() const
-  {
-    return _stance;
-  }
-
 }

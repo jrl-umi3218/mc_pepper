@@ -19,9 +19,6 @@ namespace mc_robots
     void readUrdf(const std::string & robotName, bool fixed, const std::vector<std::string> & filteredLinks);
     std::map<std::string, std::vector<double>> halfSittingPose(const rbd::MultiBody & mb) const;
     std::vector< std::map<std::string, std::vector<double> > > nominalBounds(const mc_rbdyn_urdf::Limits & limits) const;
-    virtual const std::vector< std::map<std::string, std::vector<double> > > & bounds() const;
-    virtual const std::map<std::string, std::vector<double> > & stance() const;
-    const std::map<std::string, std::pair<std::string, std::string> > & convexHull() const;
     std::map<std::string, std::pair<std::string, std::string>> stdCollisionsFiles(const rbd::MultiBody & mb) const;
     std::map<std::string, std::pair<std::string, std::string> > getConvexHull(const std::map<std::string, std::pair<std::string, std::string>> & files) const;
 
