@@ -87,7 +87,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
 
   /* Init joint values in degrees */
  	halfSitting["HeadYaw"] = { 0.0 };
- 	halfSitting["HeadPitch"] = { 30.0 };
+ 	halfSitting["HeadPitch"] = { 35.0 };
  	halfSitting["LShoulderPitch"] = { 65.0 };
  	halfSitting["LShoulderRoll"] = { 3.0 };
  	halfSitting["RShoulderPitch"] = { 65.0 };
@@ -104,6 +104,16 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
  	halfSitting["KneePitch"] = { 29.0 };
   halfSitting["RHand"] = { 0.0 };
 
+  _forceSensors.push_back(
+      mc_rbdyn::ForceSensor("LSRollResidualSensor", "LShoulder", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
+
+  // Wheels bumpers
+  _forceSensors.push_back(
+      mc_rbdyn::ForceSensor("BumperFrontLeft", "Tibia", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
+  _forceSensors.push_back(
+      mc_rbdyn::ForceSensor("BumperFrontRight", "Tibia", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
+  _forceSensors.push_back(
+      mc_rbdyn::ForceSensor("BumperBack", "Tibia", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
 
   _ref_joint_order = {
  	"KneePitch",
@@ -134,7 +144,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
   {
     readUrdf("pepper", false, filteredLinks);
 
-    /* Discarding extraJoints based solution for mobile base actuation (see below) */
+    /* Discarding extraJoints based solution for mobile base actuation (below) */
 
     /*std::vector<std::string> extraJoints {"Trans_Y", "Trans_X", "Rot_Z"};
     std::vector<double> mobileBase_velMax {0.35, 0.35, 1.0};
@@ -160,9 +170,7 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
 
   _stance = halfSittingPose(mb);
 
-
   _minimalSelfCollisions = {
-    mc_rbdyn::Collision("torso", "Head", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("RBicep", "Head", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("RForeArm", "Head", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("r_wrist", "Head", 0.03, 0.01, 0.),

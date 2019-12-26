@@ -25,7 +25,6 @@ namespace mc_robots
     std::map<std::string, std::pair<std::string, std::string>> stdCollisionsFiles(const rbd::MultiBody & mb) const;
     std::map<std::string, std::pair<std::string, std::string> > getConvexHull(const std::map<std::string, std::pair<std::string, std::string>> & files) const;
 
-
   public:
     std::vector<std::string> virtualLinks;
     std::map< std::string, std::vector<double> > halfSitting;
