@@ -104,35 +104,37 @@ PepperRobotModule::PepperRobotModule(bool load_ffb)
  	halfSitting["KneePitch"] = { 29.0 };
   halfSitting["RHand"] = { 0.0 };
 
+  // Residual sensor
+  // TODO implement dedicated sensor instead of using ForceSensor object
   _forceSensors.push_back(
       mc_rbdyn::ForceSensor("LSRollResidualSensor", "LShoulder", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
 
   // Wheels bumpers
-  _forceSensors.push_back(
-      mc_rbdyn::ForceSensor("BumperFrontLeft", "Tibia", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
-  _forceSensors.push_back(
-      mc_rbdyn::ForceSensor("BumperFrontRight", "Tibia", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
-  _forceSensors.push_back(
-      mc_rbdyn::ForceSensor("BumperBack", "Tibia", sva::PTransformd(Eigen::Vector3d(0., 0., 0.))));
+  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontRight"));
+  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontLeft"));
+  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperBack"));
+
+  // Audio device
+  _speakers.push_back(mc_rbdyn::Speaker("Loudspeaker"));
 
   _ref_joint_order = {
- 	"KneePitch",
- 	"HipPitch",
- 	"HipRoll",
- 	"HeadYaw",
- 	"HeadPitch",
- 	"LShoulderPitch",
- 	"LShoulderRoll",
- 	"LElbowYaw",
- 	"LElbowRoll",
- 	"LWristYaw",
-  "LHand",
- 	"RShoulderPitch",
- 	"RShoulderRoll",
- 	"RElbowYaw",
- 	"RElbowRoll",
- 	"RWristYaw",
- 	"RHand"
+ 	"KneePitch", // 0
+ 	"HipPitch", // 1
+ 	"HipRoll", // 2
+ 	"HeadYaw", // 3
+ 	"HeadPitch", // 4
+ 	"LShoulderPitch", // 5
+ 	"LShoulderRoll", // 6
+ 	"LElbowYaw", // 7
+ 	"LElbowRoll", // 8
+ 	"LWristYaw", // 9
+  "LHand", // 10
+ 	"RShoulderPitch", // 11
+ 	"RShoulderRoll", // 12
+ 	"RElbowYaw", // 13
+ 	"RElbowRoll", // 14
+ 	"RWristYaw", // 15
+ 	"RHand" // 16
   };
 
   /* Read URDF file */
