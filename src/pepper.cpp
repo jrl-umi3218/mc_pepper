@@ -1,12 +1,12 @@
 #include "pepper.h"
-#include <boost/filesystem.hpp>
-namespace bfs = boost::filesystem;
-#include <mc_rtc/logging.h>
+#include "config.h"
 
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <mc_rtc/logging.h>
 #include <fstream>
 
-#include "config.h"
+namespace bfs = boost::filesystem;
 
 #ifndef M_PI
 #  include <boost/math/constants/constants.hpp>
@@ -19,7 +19,6 @@ namespace mc_robots
 PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
  : RobotModule(PEPPER_DESCRIPTION_PATH, "pepper")
  {
-
   /* Path to surface descriptions */
   rsdf_dir = path + "/rsdf";
 
@@ -72,7 +71,7 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
     virtualLinks.push_back("kinect_imu_frame");
   }
 
-  /* Gripper links not to include in NoHands model */
+  /* Gripper links not included in NoHands model */
   if(!hands){
     excludedLinks.push_back("r_gripper");
     excludedLinks.push_back("RFinger11_link");
@@ -174,28 +173,29 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
  	halfSitting["KneePitch"] = { 28.9 };
   if(hands){
     for(const auto& gripJ : gripperJoints){
-      halfSitting[gripJ] = { 0.03 };
+      halfSitting[gripJ] = { 0 };
     }
   }
 
-  // Wheels bumpers
+  /* Wheels bumpers */
   _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontRight"));
   _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontLeft"));
   _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperBack"));
 
-  // Audio device
+  /* Audio device */
   _speakers.push_back(mc_rbdyn::Speaker("Loudspeaker"));
 
-  // 6DoF BodySensor
+  /* 6DoF BodySensor */
   if(extraHardware){
     _bodySensors.emplace_back("T265", "t265_pose", sva::PTransformd::Identity());
   }
 
-  // Gripper joints
+  /* Grippers */
   if(hands){
     _grippers = {{"l_gripper", {"LHand"}, false}, {"r_gripper", {"RHand"}, false}};
   }
 
+  /* Reference joint order */
   _ref_joint_order = {
  	"KneePitch", // 0
  	"HipPitch", // 1
@@ -249,9 +249,9 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
     mc_rbdyn::Collision("l_wrist", "Pelvis", 0.03, 0.01, 0.),
     mc_rbdyn::Collision("l_wrist", "r_wrist", 0.03, 0.01, 0.)
   };
+  _commonSelfCollisions = _minimalSelfCollisions;
 
   /* Additional self collisions */
-  _commonSelfCollisions = _minimalSelfCollisions;
   if(hands){
     _commonSelfCollisions.push_back(mc_rbdyn::Collision("Head", "LThumb2_link", 0.02, 0.01, 0.));
   }
