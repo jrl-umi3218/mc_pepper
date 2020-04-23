@@ -1,5 +1,8 @@
 #include "pepper.h"
 #include "config.h"
+#include "sensors/TouchSensor.h"
+#include "sensors/Speaker.h"
+#include "sensors/VisualDisplay.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
@@ -178,12 +181,15 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   }
 
   /* Wheels bumpers */
-  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontRight"));
-  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontLeft"));
-  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperBack"));
+  _sensors.push_back(std::make_shared<mc_rbdyn::TouchSensor>("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
+  _sensors.push_back(std::make_shared<mc_rbdyn::TouchSensor>("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
+  _sensors.push_back(std::make_shared<mc_rbdyn::TouchSensor>("BumperBack", "Tibia", sva::PTransformd::Identity()));
 
   /* Audio device */
-  _speakers.push_back(mc_rbdyn::Speaker("Loudspeaker"));
+  _sensors.push_back(std::make_shared<mc_rbdyn::Speaker>("Speakers", "Head", sva::PTransformd::Identity()));
+
+  /* Visual display */
+  _sensors.push_back(std::make_shared<mc_rbdyn::VisualDisplay>("Tablet", "torso", sva::PTransformd::Identity()));
 
   /* 6DoF BodySensor */
   if(extraHardware){
