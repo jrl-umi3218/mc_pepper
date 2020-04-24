@@ -25,26 +25,26 @@ find_description_package(pepper_description)
 message("PEPPER_DESCRIPTION_PATH: ${PEPPER_DESCRIPTION_PATH}")
 configure_file(src/config.h.in "${CMAKE_CURRENT_BINARY_DIR}/include/config.h")
 
-set(sensors_HDR
-  src/sensors/Speaker.h
-  src/sensors/TouchSensor.h
-  src/sensors/VisualDisplay.h
+set(devices_HDR
+  src/devices/Speaker.h
+  src/devices/TouchSensor.h
+  src/devices/VisualDisplay.h
 )
-set(sensors_SRC
-  src/sensors/Speaker.cpp
-  src/sensors/TouchSensor.cpp
-  src/sensors/VisualDisplay.cpp
+set(devices_SRC
+  src/devices/Speaker.cpp
+  src/devices/TouchSensor.cpp
+  src/devices/VisualDisplay.cpp
 )
 
-add_library(mc_pepper_sensors SHARED ${sensors_SRC} ${sensors_HDR})
-add_library(mc_pepper::sensors ALIAS mc_pepper_sensors)
-set_target_properties(mc_pepper_sensors PROPERTIES EXPORT_NAME sensors)
-target_include_directories(mc_pepper_sensors PUBLIC
+add_library(mc_pepper_devices SHARED ${devices_SRC} ${devices_HDR})
+add_library(mc_pepper::devices ALIAS mc_pepper_devices)
+set_target_properties(mc_pepper_devices PROPERTIES EXPORT_NAME devices)
+target_include_directories(mc_pepper_devices PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include>)
-target_link_libraries(mc_pepper_sensors PUBLIC mc_rtc::mc_rbdyn)
-install(FILES ${sensors_HDR} DESTINATION include/mc_pepper/sensors)
-install(TARGETS mc_pepper_sensors
+target_link_libraries(mc_pepper_devices PUBLIC mc_rtc::mc_rbdyn)
+install(FILES ${devices_HDR} DESTINATION include/mc_pepper/devices)
+install(TARGETS mc_pepper_devices
   EXPORT mc_pepperTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -52,7 +52,7 @@ install(TARGETS mc_pepper_sensors
 
 add_robot(pepper src/pepper.cpp src/pepper.h)
 target_include_directories(pepper PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/include")
-target_link_libraries(pepper PRIVATE mc_pepper::sensors)
+target_link_libraries(pepper PRIVATE mc_pepper::devices)
 
 install(EXPORT mc_pepperTargets
   FILE mc_pepperTargets.cmake

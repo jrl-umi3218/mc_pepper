@@ -1,8 +1,8 @@
 #include "pepper.h"
 #include "config.h"
-#include "sensors/TouchSensor.h"
-#include "sensors/Speaker.h"
-#include "sensors/VisualDisplay.h"
+#include "devices/TouchSensor.h"
+#include "devices/Speaker.h"
+#include "devices/VisualDisplay.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
