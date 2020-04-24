@@ -1,13 +1,13 @@
 #include "TouchSensor.h"
 
-namespace mc_rbdyn
+namespace mc_pepper
 {
 
 TouchSensor::~TouchSensor() = default;
 
-SensorPtr TouchSensor::clone() const
+mc_rbdyn::SensorPtr TouchSensor::clone() const
 {
-  return SensorPtr(new TouchSensor(*this));
+  return mc_rbdyn::SensorPtr(new TouchSensor(*this));
 }
 
-} // namespace mc_rbdyn
+} // namespace mc_pepper

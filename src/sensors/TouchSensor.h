@@ -8,13 +8,13 @@
 
 #include <vector>
 
-namespace mc_rbdyn
+namespace mc_pepper
 {
 
 /** This structure defines a touch sensor, that is a sensor that can
  * detect a contact event (e.g. tactile, bumper switch etc.).
  * The reading of this sensor is either True (touched) or False (no touch) */
-struct MC_RBDYN_DLLAPI TouchSensor : public Sensor
+struct MC_RBDYN_DLLAPI TouchSensor : public mc_rbdyn::Sensor
 {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   /** Default constructor, does not represent a valid body sensor */
@@ -30,7 +30,7 @@ struct MC_RBDYN_DLLAPI TouchSensor : public Sensor
    *
    */
   inline TouchSensor(const std::string & name, const std::string & bodyName, const sva::PTransformd & X_b_s)
-  : Sensor(name, bodyName, X_b_s)
+  : mc_rbdyn::Sensor(name, bodyName, X_b_s)
   {
     type_ = "TouchSensor";
   }
@@ -61,7 +61,7 @@ struct MC_RBDYN_DLLAPI TouchSensor : public Sensor
    touch_ = touch;
   }
 
-  SensorPtr clone() const override;
+  mc_rbdyn::SensorPtr clone() const override;
 
 private:
   bool touch_ = false;
@@ -69,4 +69,4 @@ private:
 
 typedef std::vector<TouchSensor, Eigen::aligned_allocator<TouchSensor>> TouchSensorVector;
 
-} // namespace mc_rbdyn
+} // namespace mc_pepper

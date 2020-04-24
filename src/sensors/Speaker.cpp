@@ -1,13 +1,13 @@
 #include "Speaker.h"
 
-namespace mc_rbdyn
+namespace mc_pepper
 {
 
 Speaker::~Speaker() = default;
 
-SensorPtr Speaker::clone() const
+mc_rbdyn::SensorPtr Speaker::clone() const
 {
-  return SensorPtr(new Speaker(*this));
+  return mc_rbdyn::SensorPtr(new Speaker(*this));
 }
 
-} // namespace mc_rbdyn
+} // namespace mc_pepper

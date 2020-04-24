@@ -8,12 +8,12 @@
 
 #include <vector>
 
-namespace mc_rbdyn
+namespace mc_pepper
 {
 
 /** This structure defines a visual display device, that is a device that can
  * display images (e.g. tablet) */
-struct MC_RBDYN_DLLAPI VisualDisplay : public Sensor
+struct MC_RBDYN_DLLAPI VisualDisplay : public mc_rbdyn::Sensor
 {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   /** Default constructor, does not represent a valid body sensor */
@@ -29,7 +29,7 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public Sensor
    *
    */
   inline VisualDisplay(const std::string & name, const std::string & bodyName, const sva::PTransformd & X_b_s)
-  : Sensor(name, bodyName, X_b_s)
+  : mc_rbdyn::Sensor(name, bodyName, X_b_s)
   {
     type_ = "VisualDisplay";
   }
@@ -60,7 +60,7 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public Sensor
    url_ = url;
   }
 
-  SensorPtr clone() const override;
+  mc_rbdyn::SensorPtr clone() const override;
 
 private:
   std::string url_ = "";
@@ -68,4 +68,4 @@ private:
 
 typedef std::vector<VisualDisplay, Eigen::aligned_allocator<VisualDisplay>> VisualDisplayVector;
 
-} // namespace mc_rbdyn
+} // namespace mc_pepper

@@ -1,13 +1,13 @@
 #include "VisualDisplay.h"
 
-namespace mc_rbdyn
+namespace mc_pepper
 {
 
 VisualDisplay::~VisualDisplay() = default;
 
-SensorPtr VisualDisplay::clone() const
+mc_rbdyn::SensorPtr VisualDisplay::clone() const
 {
-  return SensorPtr(new VisualDisplay(*this));
+  return mc_rbdyn::SensorPtr(new VisualDisplay(*this));
 }
 
-} // namespace mc_rbdyn
+} // namespace mc_pepper
