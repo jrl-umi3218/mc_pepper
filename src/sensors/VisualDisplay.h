@@ -49,8 +49,9 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public mc_rbdyn::Sensor
   }
 
   /** Return the url of the image to be displayed */
-  inline const std::string & display() const
+  inline std::string & display()
   {
+    newURL_ = false;
     return url_;
   }
 
@@ -58,12 +59,20 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public mc_rbdyn::Sensor
   inline void display(const std::string & url)
   {
    url_ = url;
+   newURL_ = true;
+  }
+
+  /** Return true if the URL of image to display was updated */
+  inline const bool & newURL() const
+  {
+    return newURL_;
   }
 
   mc_rbdyn::SensorPtr clone() const override;
 
 private:
   std::string url_ = "";
+  bool newURL_ = false;
 };
 
 typedef std::vector<VisualDisplay, Eigen::aligned_allocator<VisualDisplay>> VisualDisplayVector;
