@@ -181,15 +181,15 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   }
 
   /* Wheels bumpers */
-  _sensors.push_back(std::make_shared<mc_rbdyn::TouchSensor>("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
-  _sensors.push_back(std::make_shared<mc_rbdyn::TouchSensor>("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
-  _sensors.push_back(std::make_shared<mc_rbdyn::TouchSensor>("BumperBack", "Tibia", sva::PTransformd::Identity()));
+  _sensors.emplace_back(new mc_rbdyn::TouchSensor("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
+  _sensors.emplace_back(new mc_rbdyn::TouchSensor("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
+  _sensors.emplace_back(new mc_rbdyn::TouchSensor("BumperBack", "Tibia", sva::PTransformd::Identity()));
 
   /* Audio device */
-  _sensors.push_back(std::make_shared<mc_rbdyn::Speaker>("Speakers", "Head", sva::PTransformd::Identity()));
+  _sensors.emplace_back(new mc_rbdyn::Speaker("Speakers", "Head", sva::PTransformd::Identity()));
 
   /* Visual display */
-  _sensors.push_back(std::make_shared<mc_rbdyn::VisualDisplay>("Tablet", "torso", sva::PTransformd::Identity()));
+  _sensors.emplace_back(new mc_rbdyn::VisualDisplay("Tablet", "torso", sva::PTransformd::Identity()));
 
   /* 6DoF BodySensor */
   if(extraHardware){

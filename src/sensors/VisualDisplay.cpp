@@ -5,9 +5,9 @@ namespace mc_rbdyn
 
 VisualDisplay::~VisualDisplay() = default;
 
-VisualDisplay * VisualDisplay::clone() const
+SensorPtr VisualDisplay::clone() const
 {
-  return new VisualDisplay(*this);
+  return SensorPtr(new VisualDisplay(*this));
 }
 
 } // namespace mc_rbdyn

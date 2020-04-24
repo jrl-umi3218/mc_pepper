@@ -6,6 +6,8 @@
 
 #include <mc_rbdyn/Sensor.h>
 
+#include <vector>
+
 namespace mc_rbdyn
 {
 
@@ -60,7 +62,7 @@ struct MC_RBDYN_DLLAPI Speaker : public Sensor
    text_ = text;
   }
 
-  Speaker * clone() const override;
+  SensorPtr clone() const override;
 
 private:
   std::string text_ = "";

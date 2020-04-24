@@ -5,9 +5,9 @@ namespace mc_rbdyn
 
 TouchSensor::~TouchSensor() = default;
 
-TouchSensor * TouchSensor::clone() const
+SensorPtr TouchSensor::clone() const
 {
-  return new TouchSensor(*this);
+  return SensorPtr(new TouchSensor(*this));
 }
 
 } // namespace mc_rbdyn

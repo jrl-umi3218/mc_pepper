@@ -6,6 +6,8 @@
 
 #include <mc_rbdyn/Sensor.h>
 
+#include <vector>
+
 namespace mc_rbdyn
 {
 
@@ -58,7 +60,7 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public Sensor
    url_ = url;
   }
 
-  VisualDisplay * clone() const override;
+  SensorPtr clone() const override;
 
 private:
   std::string url_ = "";

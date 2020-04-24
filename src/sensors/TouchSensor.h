@@ -6,6 +6,8 @@
 
 #include <mc_rbdyn/Sensor.h>
 
+#include <vector>
+
 namespace mc_rbdyn
 {
 
@@ -59,7 +61,7 @@ struct MC_RBDYN_DLLAPI TouchSensor : public Sensor
    touch_ = touch;
   }
 
-  TouchSensor * clone() const override;
+  SensorPtr clone() const override;
 
 private:
   bool touch_ = false;
