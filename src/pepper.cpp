@@ -177,14 +177,6 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
     }
   }
 
-  /* Wheels bumpers */
-  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontRight"));
-  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperFrontLeft"));
-  _touchSensors.push_back(mc_rbdyn::TouchSensor("BumperBack"));
-
-  /* Audio device */
-  _speakers.push_back(mc_rbdyn::Speaker("Loudspeaker"));
-
   /* 6DoF BodySensor */
   if(extraHardware){
     _bodySensors.emplace_back("T265", "t265_pose", sva::PTransformd::Identity());
