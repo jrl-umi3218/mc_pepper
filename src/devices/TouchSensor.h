@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <mc_rbdyn/Sensor.h>
+#include <mc_rbdyn/Device.h>
 
 #include <vector>
 
@@ -14,39 +14,39 @@ namespace mc_pepper
 /** This structure defines a touch sensor, that is a sensor that can
  * detect a contact event (e.g. tactile, bumper switch etc.).
  * The reading of this sensor is either True (touched) or False (no touch) */
-struct MC_RBDYN_DLLAPI TouchSensor : public mc_rbdyn::Sensor
+struct MC_RBDYN_DLLAPI TouchSensor : public mc_rbdyn::Device
 {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-  /** Default constructor, does not represent a valid body sensor */
+  /** Default constructor, does not represent a valid touch sensor */
   inline TouchSensor() : TouchSensor("", "", sva::PTransformd::Identity()) {}
 
   /** Constructor
    *
-   * @param name Name of the sensor
+   * @param name Name of the touch sensor
    *
-   * @param bodyName Name of the body to which the sensor is attached
+   * @param bodyName Name of the body to which the touch sensor is attached
    *
-   * @param X_b_s Transformation from the parent body to the sensor
+   * @param X_b_s Transformation from the parent body to the touch sensor
    *
    */
   inline TouchSensor(const std::string & name, const std::string & bodyName, const sva::PTransformd & X_b_s)
-  : mc_rbdyn::Sensor(name, bodyName, X_b_s)
+  : mc_rbdyn::Device(name, bodyName, X_b_s)
   {
     type_ = "TouchSensor";
   }
 
   ~TouchSensor() override;
 
-  /** Get the sensor's parent body name */
+  /** Get the touch sensor's parent body name */
   inline const std::string & parentBody() const
   {
-    return Sensor::parent();
+    return Device::parent();
   }
 
-  /** Return the transformation from the parent body to the sensor */
+  /** Return the transformation from the parent body to the touch sensor */
   inline const sva::PTransformd & X_b_s() const
   {
-    return Sensor::X_p_s();
+    return Device::X_p_s();
   }
 
   /** Return the sensor's touch reading, false if not provided */
@@ -61,7 +61,7 @@ struct MC_RBDYN_DLLAPI TouchSensor : public mc_rbdyn::Sensor
    touch_ = touch;
   }
 
-  mc_rbdyn::SensorPtr clone() const override;
+  mc_rbdyn::DevicePtr clone() const override;
 
 private:
   bool touch_ = false;

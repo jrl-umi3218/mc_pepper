@@ -5,9 +5,9 @@ namespace mc_pepper
 
 TouchSensor::~TouchSensor() = default;
 
-mc_rbdyn::SensorPtr TouchSensor::clone() const
+mc_rbdyn::DevicePtr TouchSensor::clone() const
 {
-  return mc_rbdyn::SensorPtr(new TouchSensor(*this));
+  return mc_rbdyn::DevicePtr(new TouchSensor(*this));
 }
 
 } // namespace mc_pepper

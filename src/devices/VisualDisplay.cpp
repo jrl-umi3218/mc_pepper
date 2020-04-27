@@ -5,9 +5,9 @@ namespace mc_pepper
 
 VisualDisplay::~VisualDisplay() = default;
 
-mc_rbdyn::SensorPtr VisualDisplay::clone() const
+mc_rbdyn::DevicePtr VisualDisplay::clone() const
 {
-  return mc_rbdyn::SensorPtr(new VisualDisplay(*this));
+  return mc_rbdyn::DevicePtr(new VisualDisplay(*this));
 }
 
 } // namespace mc_pepper

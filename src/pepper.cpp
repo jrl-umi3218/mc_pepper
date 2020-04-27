@@ -181,15 +181,15 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   }
 
   /* Wheels bumpers */
-  _sensors.emplace_back(new mc_pepper::TouchSensor("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
-  _sensors.emplace_back(new mc_pepper::TouchSensor("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
-  _sensors.emplace_back(new mc_pepper::TouchSensor("BumperBack", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("BumperBack", "Tibia", sva::PTransformd::Identity()));
 
   /* Audio device */
-  _sensors.emplace_back(new mc_pepper::Speaker("Speakers", "Head", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::Speaker("Speakers", "Head", sva::PTransformd::Identity()));
 
   /* Visual display */
-  _sensors.emplace_back(new mc_pepper::VisualDisplay("Tablet", "torso", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::VisualDisplay("Tablet", "torso", sva::PTransformd::Identity()));
 
   /* 6DoF BodySensor */
   if(extraHardware){
