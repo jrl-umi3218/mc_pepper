@@ -80,12 +80,25 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public mc_rbdyn::Device
    succeed_ = state;
   }
 
+  /** Request to reset tablet screen*/
+  inline void reset(const bool & state)
+  {
+   reset_ = state;
+  }
+
+  /** Reset tablet screen to previous state */
+  inline bool & reset()
+  {
+    return reset_;
+  }
+
   mc_rbdyn::DevicePtr clone() const override;
 
 private:
   std::string url_ = "";
   bool newURL_ = false;
   bool succeed_ = false;
+  bool reset_ = false;
 };
 
 typedef std::vector<VisualDisplay, Eigen::aligned_allocator<VisualDisplay>> VisualDisplayVector;
