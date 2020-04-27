@@ -68,10 +68,23 @@ struct MC_RBDYN_DLLAPI Speaker : public mc_rbdyn::Sensor
    return text_!="";
   }
 
+  /** Mark if speaker is playing a sound */
+  inline void playing(const bool & playing)
+  {
+   playing_ = playing;
+  }
+
+  /** Check if speaker is playing a sound */
+  inline bool playing()
+  {
+   return playing_;
+  }
+
   mc_rbdyn::SensorPtr clone() const override;
 
 private:
   std::string text_ = "";
+  bool playing_ = false;
 };
 
 typedef std::vector<Speaker, Eigen::aligned_allocator<Speaker>> SpeakerVector;

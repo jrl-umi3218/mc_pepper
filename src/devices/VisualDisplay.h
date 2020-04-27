@@ -68,11 +68,24 @@ struct MC_RBDYN_DLLAPI VisualDisplay : public mc_rbdyn::Sensor
     return newURL_;
   }
 
+  /** Return if succeed to show image */
+  inline bool & succeed()
+  {
+    return succeed_;
+  }
+
+  /** Set state of image display */
+  inline void succeed(const bool & state)
+  {
+   succeed_ = state;
+  }
+
   mc_rbdyn::SensorPtr clone() const override;
 
 private:
   std::string url_ = "";
   bool newURL_ = false;
+  bool succeed_ = false;
 };
 
 typedef std::vector<VisualDisplay, Eigen::aligned_allocator<VisualDisplay>> VisualDisplayVector;
