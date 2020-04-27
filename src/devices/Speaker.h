@@ -68,23 +68,23 @@ struct MC_RBDYN_DLLAPI Speaker : public mc_rbdyn::Device
    return text_!="";
   }
 
-  /** Mark if speaker is playing a sound */
-  inline void playing(const bool & playing)
+  /** Mark if the current speaking task is done */
+  inline void done(const bool & done)
   {
-   playing_ = playing;
+   done_ = done;
   }
 
-  /** Check if speaker is playing a sound */
-  inline bool playing()
+  /** Check if the current speaking task is done */
+  inline bool done()
   {
-   return playing_;
+   return done_;
   }
 
   mc_rbdyn::DevicePtr clone() const override;
 
 private:
   std::string text_ = "";
-  bool playing_ = false;
+  bool done_ = false;
 };
 
 typedef std::vector<Speaker, Eigen::aligned_allocator<Speaker>> SpeakerVector;
