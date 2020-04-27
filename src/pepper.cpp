@@ -213,16 +213,14 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
  	"LElbowYaw", // 7
  	"LElbowRoll", // 8
  	"LWristYaw", // 9
- 	"RShoulderPitch", // 10
- 	"RShoulderRoll", // 11
- 	"RElbowYaw", // 12
- 	"RElbowRoll", // 13
- 	"RWristYaw", // 14
+  "LHand", // 10
+ 	"RShoulderPitch", // 11
+ 	"RShoulderRoll", // 12
+ 	"RElbowYaw", // 13
+ 	"RElbowRoll", // 14
+ 	"RWristYaw", // 15
+  "RHand" // 16
   };
-  if(hands){
-    _ref_joint_order.push_back("LHand"); // 15
-    _ref_joint_order.push_back("RHand"); // 16
-  }
 
   /* Read URDF file */
   readUrdf("pepper", fixed, excludedLinks);
