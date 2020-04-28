@@ -27,6 +27,7 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
 
   /* Virtual links without convex files */
  	virtualLinks.push_back("base_link");
+  virtualLinks.push_back("tablet");
   virtualLinks.push_back("r_gripper");
   virtualLinks.push_back("RFinger11_link");
   virtualLinks.push_back("RFinger12_link");
