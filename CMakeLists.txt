@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(Boost REQUIRED COMPONENTS timer serialization filesystem)
 find_package(pepper_description REQUIRED)
-find_package(mc_rtc REQUIRED)
+find_package(mc_rtc 1.3.0 REQUIRED)
 
 if("${pepper_description_INSTALL_PREFIX}" STREQUAL "")
   if("${pepper_description_SOURCE_PREFIX}" STREQUAL "")
