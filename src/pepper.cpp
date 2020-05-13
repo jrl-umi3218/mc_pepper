@@ -199,7 +199,10 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
 
   /* Grippers */
   if(hands){
-    _grippers = {{"l_gripper", {"LHand"}, false}, {"r_gripper", {"RHand"}, false}};
+    // Module wide gripper configuration
+    _gripperSafety = {0.15, 1.0};
+    _grippers = {{"l_gripper", {"LHand"}, false},
+                 {"r_gripper", {"RHand"}, false}};
   }
 
   /* Reference joint order */
