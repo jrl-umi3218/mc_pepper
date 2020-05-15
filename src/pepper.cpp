@@ -1,5 +1,8 @@
 #include "pepper.h"
 #include "config.h"
+#include "devices/Speaker.h"
+#include "devices/TouchSensor.h"
+#include "devices/VisualDisplay.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
@@ -24,6 +27,7 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
 
   /* Virtual links without convex files */
  	virtualLinks.push_back("base_link");
+  virtualLinks.push_back("tablet");
   virtualLinks.push_back("r_gripper");
   virtualLinks.push_back("RFinger11_link");
   virtualLinks.push_back("RFinger12_link");
@@ -176,6 +180,17 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
       halfSitting[gripJ] = { 0 };
     }
   }
+
+  /* Wheels bumpers */
+  _devices.emplace_back(new mc_pepper::TouchSensor("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("BumperBack", "Tibia", sva::PTransformd::Identity()));
+
+  /* Audio device */
+  _devices.emplace_back(new mc_pepper::Speaker("Speakers", "Head", sva::PTransformd::Identity()));
+
+  /* Visual display */
+  _devices.emplace_back(new mc_pepper::VisualDisplay("Tablet", "torso", sva::PTransformd::Identity()));
 
   /* 6DoF BodySensor */
   if(extraHardware){
