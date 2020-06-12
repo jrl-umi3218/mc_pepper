@@ -287,8 +287,7 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
     }
     else
     {
-      LOG_ERROR("Could not open Pepper model at " << urdfPath)
-      throw("Failed to open Pepper model");
+      mc_rtc::log::error_and_throw<std::runtime_error>("Could not open Pepper model at {}", urdfPath);
     }
   }
 
@@ -308,7 +307,7 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
       }
       else if(j.name() != "Root" && j.dof() > 0)
       {
-        LOG_WARNING("Joint " << j.name() << " has " << j.dof() << " dof, but is not part of half sitting posture.");
+        mc_rtc::log::warning("Joint {} has {} dof, but is not part of half sitting posture", j.name(), j.dof());
       }
     }
     return res;

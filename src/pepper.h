@@ -78,7 +78,7 @@ extern "C"
     }
     else
     {
-      LOG_ERROR("Pepper module cannot create an object of type " << name)
+      mc_rtc::log::error_and_throw<std::runtime_error>("Pepper module cannot create an object of type {}", name);
       return nullptr;
     }
   }
