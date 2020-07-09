@@ -3,6 +3,7 @@
 #include "devices/Speaker.h"
 #include "devices/TouchSensor.h"
 #include "devices/VisualDisplay.h"
+#include "tasks/CoMRelativeBodyTask.h"
 #include "constraints/BoundedAccelerationConstr.h"
 
 #include <boost/algorithm/string.hpp>
@@ -379,6 +380,7 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   }
 
   void PepperRobotModule::forceLibraryLink(){
+    mc_pepper::CoMRelativeBodyTask task("", mc_rbdyn::Robots(), 0, 0, 0);
     mc_pepper::BoundedAccelerationConstr cnstr(0, 0, 0);
   }
 
