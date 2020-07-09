@@ -34,3 +34,20 @@ Once your controller is ready to be tested, you can use [`mc_naoqi`](https://git
 * `PepperExtraHardware` - moving base, hand joints and extra hardware included
 * `PepperExtraHardwareNoHands` - moving base, hand joints not included, extra hardware included
 * `PepperFixedExtraHardwareNoHands` - fixed base, hand joints not included, extra hardware included
+
+
+## Example of custom tasks and constraints
+
+In `mc_rtc` controller two main elements for robot control are
+* **Tasks** - objectives, what robot should do the best it can
+* **Constraints** - limits, that robot should always respect
+
+Many tasks and constraints are already implemented in `mc_rtc`. For instance `PostureTask`, `CoMTask`, `EndEffectorTask`, `KinematicsConstraint`, ` ContactConstraint` etc. However, in some cases it might be desirable to design and implement **new custom tasks or constraints** not yet implemented in `mc_rtc`. Such new tasks and constraint might be specific to a robot, use-case or research topic.
+
+In this repository, we provide an example of a custom `CoMRelativeBodyTask`, that allows to specify desired Pepper CoM target relative to the robot mobile base frame (as opposed to world frame in `mc_rtc CoMTask`). Implementation of this custom task can be found in the [`tasks`](src/tasks) folder.
+
+An implementation of a custom `BoundedAccelerationConstr` constraint, to impose acceleration bounds for Pepper mobile base, can be found in the [`constraints`](src/constraints) folder.
+
+How these custom tasks and constraints are loaded and used in a sample `mc_rtc` controller can be see in [PepperFSMController](https://gite.lirmm.fr/mc-controllers/pepperfsmcontroller).
+
+**In an analogous way, many other novel tasks and constraints can be implemented and tested**
