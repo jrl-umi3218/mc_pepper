@@ -88,7 +88,9 @@ install(TARGETS mc_pepper_constraints
 # Pepper robot module library
 add_robot(pepper src/pepper.cpp src/pepper.h)
 target_include_directories(pepper PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/include")
+target_link_libraries(pepper PRIVATE mc_pepper::tasks)
 target_link_libraries(pepper PRIVATE mc_pepper::devices)
+target_link_libraries(pepper PRIVATE mc_pepper::constraints)
 
 install(EXPORT mc_pepperTargets
   FILE mc_pepperTargets.cmake

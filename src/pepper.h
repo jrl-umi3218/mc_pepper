@@ -19,6 +19,9 @@ protected:
   std::vector< std::map<std::string, std::vector<double> > > nominalBounds(const mc_rbdyn_urdf::Limits & limits) const;
   std::map<std::string, std::pair<std::string, std::string>> stdCollisionsFiles(const rbd::MultiBody & mb) const;
   std::map<std::string, std::pair<std::string, std::string> > getConvexHull(const std::map<std::string, std::pair<std::string, std::string>> & files) const;
+  
+  // This is useless but ensures we bring in BoundedAccelerationConstr into the library
+  void forceLibraryLink();
 
 public:
   std::vector<std::string> virtualLinks;
