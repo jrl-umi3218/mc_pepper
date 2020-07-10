@@ -56,16 +56,11 @@ void BoundedAccelerationConstr::removeFromSolver(tasks::qp::QPSolver & solver)
   }
 }
 
-} // namespace mc_pepper
-
-namespace
-{
-
 /** This shows how a constraint can be registered with the ConstraintSetLoader */
 static auto registered = mc_solver::ConstraintSetLoader::register_load_function(
     "pepper_boundedBaseAcceleration", // unique identifier
     [](mc_solver::QPSolver & solver, const mc_rtc::Configuration & config) { // loading function
-      return std::make_shared<mc_pepper::BoundedAccelerationConstr>(robotIndexFromConfig(config, solver.robots(), "BoundedAccelerationConstr"), config("maxBaseTransAcc"), config("maxBaseRotAcc"));
+      return std::make_shared<BoundedAccelerationConstr>(robotIndexFromConfig(config, solver.robots(), "BoundedAccelerationConstr"), config("maxBaseTransAcc"), config("maxBaseRotAcc"));
     });
 
-}
+} // namespace mc_pepper
