@@ -19,6 +19,8 @@ protected:
   std::vector< std::map<std::string, std::vector<double> > > nominalBounds(const mc_rbdyn_urdf::Limits & limits) const;
   std::map<std::string, std::pair<std::string, std::string>> stdCollisionsFiles(const rbd::MultiBody & mb) const;
   std::map<std::string, std::pair<std::string, std::string> > getConvexHull(const std::map<std::string, std::pair<std::string, std::string>> & files) const;
+  // Ensure that mc_pepper::(tasks/constraints) libraries are loaded by mc_rtc when mc_pepper is loaded
+  void forceLibraryLink();
 
 public:
   std::vector<std::string> virtualLinks;
