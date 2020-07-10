@@ -145,6 +145,10 @@ static auto registered = mc_tasks::MetaTaskLoader::register_load_function(
   [](mc_solver::QPSolver & solver, const mc_rtc::Configuration & config) { // loading function
     auto robotIndex = robotIndexFromConfig(config, solver.robots(), "CoMRelativeBodyTask");
     auto t = std::make_shared<CoMRelativeBodyTask>(config("body"), solver.robots(), robotIndex, config("stiffness"), config("weight"));
+    if(config.has("target"))
+    {
+      t->target(config("target"));
+    }
     t->load(solver, config);
     return t;
   });
