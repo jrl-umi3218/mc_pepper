@@ -184,9 +184,9 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   }
 
   /* Wheels bumpers */
-  _devices.emplace_back(new mc_pepper::TouchSensor("BumperFrontRight", "Tibia", sva::PTransformd::Identity()));
-  _devices.emplace_back(new mc_pepper::TouchSensor("BumperFrontLeft", "Tibia", sva::PTransformd::Identity()));
-  _devices.emplace_back(new mc_pepper::TouchSensor("BumperBack", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("FrontRight", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("FrontLeft", "Tibia", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("Back", "Tibia", sva::PTransformd::Identity()));
 
   /* Audio device */
   _devices.emplace_back(new mc_pepper::Speaker("Speakers", "Head", sva::PTransformd::Identity()));
