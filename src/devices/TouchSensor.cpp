@@ -7,7 +7,9 @@ TouchSensor::~TouchSensor() = default;
 
 mc_rbdyn::DevicePtr TouchSensor::clone() const
 {
-  return mc_rbdyn::DevicePtr(new TouchSensor(*this));
+  auto touchSensor = new TouchSensor(name_, parent_, X_p_s_);
+  touchSensor->touch_=touch_;
+  return mc_rbdyn::DevicePtr(touchSensor);
 }
 
 } // namespace mc_pepper

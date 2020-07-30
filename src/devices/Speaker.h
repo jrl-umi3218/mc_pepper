@@ -17,7 +17,7 @@ struct MC_RBDYN_DLLAPI Speaker : public mc_rbdyn::Device
 {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   /** Default constructor, does not represent a valid speaker */
-  inline Speaker() : Speaker("", "", sva::PTransformd::Identity()) {}
+  inline Speaker() : Speaker("") {}
 
   /** Constructor
    *
@@ -28,25 +28,13 @@ struct MC_RBDYN_DLLAPI Speaker : public mc_rbdyn::Device
    * @param X_b_s Transformation from the parent body to the speaker
    *
    */
-  inline Speaker(const std::string & name, const std::string & bodyName, const sva::PTransformd & X_b_s)
-  : mc_rbdyn::Device(name, bodyName, X_b_s)
+  inline Speaker(const std::string & name)
+  : mc_rbdyn::Device(name)
   {
     type_ = "Speaker";
   }
 
   ~Speaker() override;
-
-  /** Get the speaker's parent body name */
-  inline const std::string & parentBody() const
-  {
-    return Device::parent();
-  }
-
-  /** Return the transformation from the parent body to the speaker */
-  inline const sva::PTransformd & X_b_s() const
-  {
-    return Device::X_p_s();
-  }
 
   /** Return the text to say and reset the initial state */
   inline const std::string say()

@@ -189,10 +189,10 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   _devices.emplace_back(new mc_pepper::TouchSensor("Back", "Tibia", sva::PTransformd::Identity()));
 
   /* Audio device */
-  _devices.emplace_back(new mc_pepper::Speaker("Speakers", "Head", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::Speaker("Speakers"));
 
   /* Visual display */
-  _devices.emplace_back(new mc_pepper::VisualDisplay("Tablet", "torso", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::VisualDisplay("Tablet", "tablet", sva::PTransformd::Identity()));
 
   /* 6DoF BodySensor */
   if(extraHardware){
