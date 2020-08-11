@@ -19,6 +19,14 @@ make
 sudo make install
 ```
 
+### Robot devices
+
+This robot module allows to interact with some robot [`devices`](src/devices) from `mc_rtc` controller, namely:
+
+* `Speakers` - command a word or a sentence to say
+* `TouchSensor` - detect when mobile base bumper is touched
+* `VisualDisplay` - set tablet screen image
+
 ### Robot module types
 
 Depending on the use-case, users might prefer to use one of the following implemented types of the Pepper robot module:
