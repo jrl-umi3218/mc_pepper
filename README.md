@@ -1,6 +1,6 @@
-# [Pepper humanoid robot](https://www.softbankrobotics.com/emea/pepper) [`mc_rtc`](https://jrl-umi3218.github.io/mc_rtc/) module
+# [Pepper humanoid](https://www.softbankrobotics.com/emea/pepper) robot module for [`mc_rtc`](https://jrl-umi3218.github.io/mc_rtc/)
 
-This package contains a software representation, or robot module, of [Pepper humanoid robot](https://www.softbankrobotics.com/emea/pepper) platform. This robot module is used by [`mc_rtc`](https://jrl-umi3218.github.io/mc_rtc/) framework to realize control of Pepper robot in simulation or in experiments with real platform.
+This package contains a software representation, or a robot module, of [Pepper humanoid robot](https://www.softbankrobotics.com/emea/pepper) platform. This robot module is used by [`mc_rtc`](https://jrl-umi3218.github.io/mc_rtc/) framework to realize control of Pepper robot in simulation or in experiments with real platform.
 
 ### Required dependencies
 
@@ -19,14 +19,9 @@ make
 sudo make install
 ```
 
-### Next steps
-
-Now that `mc_pepper` is successfully installed, you can use [`PepperFSMController`](https://gite.lirmm.fr/nana/pepperfsmcontroller) project as a staring point or an example on how to write your own `mc_rtc` controller for Pepper robot.
-
-Once your controller is ready to be tested, you can use [`mc_naoqi`](https://gite.lirmm.fr/multi-contact/mc_naoqi) interface to run and visualize your controller in simulation or to run your controller on a real Pepper humanoid robot platform.
-
 ### Robot module types
 
+Depending on the use-case, users might prefer to use one of the following implemented types of the Pepper robot module:
 * `Pepper` - moving base, hand joints included (default module)
 * `PepperFixed` - fixed base, hand joints included
 * `PepperNoHands` - moving base, hand joints not included
@@ -51,3 +46,9 @@ An implementation of a custom `BoundedAccelerationConstr` constraint, to impose 
 How these custom tasks and constraints are loaded and used in a sample `mc_rtc` controller can be see in [PepperFSMController](https://gite.lirmm.fr/mc-controllers/pepperfsmcontroller).
 
 **In an analogous way, many other novel tasks and constraints can be implemented and tested**
+
+### Next steps
+
+Now that `mc_pepper` is successfully installed, you can use [`PepperFSMController`](https://gite.lirmm.fr/nana/pepperfsmcontroller) project as a staring point or an example on how to write your own `mc_rtc` controller for Pepper robot.
+
+Once your controller is ready to be tested, you can use [`mc_naoqi`](https://gite.lirmm.fr/multi-contact/mc_naoqi) interface to run and visualize your controller in simulation or to run your controller on a real Pepper humanoid robot platform.
