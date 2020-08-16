@@ -188,6 +188,13 @@ PepperRobotModule::PepperRobotModule(bool fixed, bool hands, bool extraHardware)
   _devices.emplace_back(new mc_pepper::TouchSensor("FrontLeft", "Tibia", sva::PTransformd::Identity()));
   _devices.emplace_back(new mc_pepper::TouchSensor("Back", "Tibia", sva::PTransformd::Identity()));
 
+  /* Tactile sensors */
+  _devices.emplace_back(new mc_pepper::TouchSensor("Head/Touch/Front", "Head", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("Head/Touch/Rear", "Head", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("Head/Touch/Middle", "Head", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("RHand/Touch/Back", "r_wrist", sva::PTransformd::Identity()));
+  _devices.emplace_back(new mc_pepper::TouchSensor("LHand/Touch/Back", "l_wrist", sva::PTransformd::Identity()));
+
   /* Audio device */
   _devices.emplace_back(new mc_pepper::Speaker("Speakers"));
 
