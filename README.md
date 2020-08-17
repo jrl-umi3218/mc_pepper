@@ -5,12 +5,12 @@ This package contains a software representation, or a robot module, of [Pepper h
 ### Required dependencies
 
 * [`mc_rtc`](https://jrl-umi3218.github.io/mc_rtc/)
-* [`pepper_description`](https://gite.lirmm.fr/softbankrobotics/pepper_description)
+* [`pepper_description`](https://github.com/jrl-umi3218/pepper_description)
 
 ### Build instructions
 
 ``` bash
-git clone git@gite.lirmm.fr:multi-contact/mc_pepper.git
+git clone https://github.com/jrl-umi3218/mc_pepper
 cd mc_pepper
 mkdir build
 cd build
@@ -51,12 +51,12 @@ In this repository, we provide an example of a custom `CoMRelativeBodyTask`, tha
 
 An implementation of a custom `BoundedAccelerationConstr` constraint, to impose acceleration bounds for Pepper mobile base, can be found in the [`constraints`](src/constraints) folder.
 
-How these custom tasks and constraints are loaded and used in a sample `mc_rtc` controller can be see in [PepperFSMController](https://gite.lirmm.fr/mc-controllers/pepperfsmcontroller).
+How these custom tasks and constraints are loaded and used in a sample `mc_rtc` controller can be see in [PepperFSMController](https://github.com/jrl-umi3218/pepper-fsm-controller).
 
 **In an analogous way, many other novel tasks and constraints can be implemented and tested**
 
 ### Next steps
 
-Now that `mc_pepper` is successfully installed, you can use [`PepperFSMController`](https://gite.lirmm.fr/nana/pepperfsmcontroller) project as a staring point or an example on how to write your own `mc_rtc` controller for Pepper robot.
+Now that `mc_pepper` is successfully installed, you can use [`PepperFSMController`](https://github.com/jrl-umi3218/pepper-fsm-controller) project as a staring point or an example on how to write your own `mc_rtc` controller for Pepper robot.
 
-Once your controller is ready to be tested, you can use [`mc_naoqi`](https://gite.lirmm.fr/multi-contact/mc_naoqi) interface to run and visualize your controller in simulation or to run your controller on a real Pepper humanoid robot platform.
+Once your controller is ready to be tested, you can use [`mc_naoqi`](https://github.com/jrl-umi3218/mc_naoqi) interface to run and visualize your controller in simulation or to run your controller on a real Pepper humanoid robot platform.
