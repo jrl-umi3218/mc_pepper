@@ -20,7 +20,7 @@ find_package(mc_rtc 1.4.0 REQUIRED)
 
 find_description_package(pepper_description)
 
-message("PEPPER_DESCRIPTION_PATH: ${PEPPER_DESCRIPTION_PATH}")
+message(STATUS "PEPPER_DESCRIPTION_PATH: ${PEPPER_DESCRIPTION_PATH}")
 configure_file(src/config.h.in "${CMAKE_CURRENT_BINARY_DIR}/include/config.h")
 
 # Pepper custom devices library
