@@ -345,9 +345,9 @@ std::map<std::string, std::pair<std::string, std::string>> PepperRobotModule::st
   return res;
 }
 
-void PepperRobotModule::forceLibraryLink()
+void PepperRobotModule::forceLibraryLink(const mc_rbdyn::Robots & robots)
 {
-  mc_pepper::CoMRelativeBodyTask task("", mc_rbdyn::Robots(), 0, 0, 0);
+  mc_pepper::CoMRelativeBodyTask task("", robots, 0, 0, 0);
   mc_pepper::BoundedAccelerationConstr cnstr(0, 0, 0);
 }
 
