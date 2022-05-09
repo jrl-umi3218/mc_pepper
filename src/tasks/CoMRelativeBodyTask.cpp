@@ -40,22 +40,22 @@ void CoMRelativeBodyTask::update(const std::vector<rbd::MultiBody> &,
   jacMat_-= comJac_.jacobian(robot_.mb(), robot_.mbc());
 }
 
-const Eigen::MatrixXd & CoMRelativeBodyTask::jac()
+const Eigen::MatrixXd & CoMRelativeBodyTask::jac() const
 {
   return jacMat_;
 }
 
-const Eigen::VectorXd & CoMRelativeBodyTask::eval()
+const Eigen::VectorXd & CoMRelativeBodyTask::eval() const
 {
   return eval_;
 }
 
-const Eigen::VectorXd & CoMRelativeBodyTask::speed()
+const Eigen::VectorXd & CoMRelativeBodyTask::speed() const
 {
   return speed_;
 }
 
-const Eigen::VectorXd & CoMRelativeBodyTask::normalAcc()
+const Eigen::VectorXd & CoMRelativeBodyTask::normalAcc() const
 {
   return normalAcc_;
 }

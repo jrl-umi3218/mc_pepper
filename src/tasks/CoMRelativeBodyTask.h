@@ -39,10 +39,10 @@ struct CoMRelativeBodyTask : public tasks::qp::HighLevelTask
               const std::vector<rbd::MultiBodyConfig> & mbcs,
               const tasks::qp::SolverData & data) override;
 
-  const Eigen::MatrixXd & jac() override;
-  const Eigen::VectorXd & eval() override;
-  const Eigen::VectorXd & speed() override;
-  const Eigen::VectorXd & normalAcc() override;
+  const Eigen::MatrixXd & jac() const override;
+  const Eigen::VectorXd & eval() const override;
+  const Eigen::VectorXd & speed() const override;
+  const Eigen::VectorXd & normalAcc() const override;
 
   /** Set the target relative position */
   void target(const Eigen::Vector3d & pos);
