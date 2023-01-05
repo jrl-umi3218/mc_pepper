@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mc_solver/GenInequalityConstraint.h>
+#include <mc_solver/ConstraintSet.h>
 
 namespace details
 {
@@ -42,12 +43,12 @@ struct BoundedAccelerationConstr : public mc_solver::ConstraintSet
 {
   BoundedAccelerationConstr(unsigned int rIndex, double maxAccTransXY, double maxAccRotZ);
 
-  void addToSolver(const std::vector<rbd::MultiBody> & mbs, tasks::qp::QPSolver & solver) override;
-
-  void removeFromSolver(tasks::qp::QPSolver & solver) override;
+ protected:
+  void addToSolverImpl(mc_solver::QPSolver & solver) override;
+  virtual void removeFromSolverImpl(mc_solver::QPSolver & solver) override;
 private:
   details::BoundedAccelerationConstr constr_;
-  bool inSolver_ = false;
+  unsigned rIndex_ = 0;
 };
 
 } // namespace mc_pepper

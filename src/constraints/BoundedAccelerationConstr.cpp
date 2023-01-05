@@ -1,6 +1,7 @@
 #include "BoundedAccelerationConstr.h"
 
 #include <mc_solver/ConstraintSetLoader.h>
+#include <mc_solver/TasksQPSolver.h>
 
 namespace details
 {
@@ -30,29 +31,42 @@ BoundedAccelerationConstr::BoundedAccelerationConstr(unsigned int rIndex,
 
 namespace mc_pepper
 {
+using Backend = mc_solver::QPSolver::Backend;
 
 BoundedAccelerationConstr::BoundedAccelerationConstr(unsigned int rIndex, double maxAccTransXY, double maxAccRotZ)
-: constr_(rIndex, maxAccTransXY, maxAccRotZ)
+: constr_(rIndex, maxAccTransXY, maxAccRotZ), rIndex_(rIndex)
 {
 }
 
-void BoundedAccelerationConstr::addToSolver(const std::vector<rbd::MultiBody> & mbs, tasks::qp::QPSolver & solver)
+void BoundedAccelerationConstr::addToSolverImpl(mc_solver::QPSolver & solver)
 {
-  if(!inSolver_)
+  switch(solver.backend())
   {
-    constr_.addToSolver(mbs, solver);
-    solver.updateConstrSize();
-    inSolver_ = true;
+    case Backend::Tasks:
+      {
+        auto & solverT = tasks_solver(solver);
+        constr_.addToSolver(solver.robots().mbs(), solverT.solver());
+        solverT.updateConstrSize();
+      }
+      break;
+    default:
+      break;
   }
 }
 
-void BoundedAccelerationConstr::removeFromSolver(tasks::qp::QPSolver & solver)
+void BoundedAccelerationConstr::removeFromSolverImpl(mc_solver::QPSolver & solver)
 {
-  if(inSolver_)
+  switch(solver.backend())
   {
-    solver.removeConstraint(&constr_);
-    solver.updateConstrSize();
-    inSolver_ = false;
+    case Backend::Tasks:
+      {
+        auto & solverT = tasks_solver(solver);
+        solverT.removeConstraint(&constr_);
+        solverT.updateConstrSize();
+      }
+      break;
+    default:
+      break;
   }
 }
 

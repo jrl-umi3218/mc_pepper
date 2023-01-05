@@ -1,6 +1,7 @@
 #include "CoMRelativeBodyTask.h"
 
 #include <mc_rtc/gui/Point3D.h>
+#include <mc_rtc/gui/ArrayInput.h>
 #include <mc_tasks/MetaTaskLoader.h>
 
 namespace details
@@ -85,39 +86,91 @@ unsigned int CoMRelativeBodyTask::bIndex() const
 namespace mc_pepper
 {
 
+static inline auto tasks_error(mc_rtc::void_ptr & ptr)
+{
+  return static_cast<details::CoMRelativeBodyTask*>(ptr.get());
+}
+
+static inline const auto tasks_error(const mc_rtc::void_ptr & ptr)
+{
+  return static_cast<details::CoMRelativeBodyTask*>(ptr.get());
+}
+
 CoMRelativeBodyTask::CoMRelativeBodyTask(const std::string & body, const mc_rbdyn::Robots & robots, unsigned int robotIndex, double stiffness, double weight)
-: mc_tasks::TrajectoryTaskGeneric<details::CoMRelativeBodyTask>(robots, robotIndex, stiffness, weight)
+: mc_tasks::TrajectoryTaskGeneric(robots, robotIndex, stiffness, weight), body_(body), bIndex_(robots.robot(robotIndex).bodyIndexByName(body))
 {
   const auto & robot = robots.robot(robotIndex);
   Eigen::Vector3d init = robot.bodyPosW(body).translation() - robot.com();
-  finalize(robots, robotIndex, body, init);
+  switch(backend_)
+  {
+    case Backend::Tasks:
+      finalize<details::CoMRelativeBodyTask>(robots, robotIndex, body, init);
+      break;
+    default:
+      mc_rtc::log::error_and_throw("[CoMRelativeBodyTask] Not implemented for solver backend: {}", backend_);
+  }
   type_ = "com_relative_body";
   name_ = "com_relative_" + body;
 }
 
 void CoMRelativeBodyTask::target(const Eigen::Vector3d & pos)
 {
-  errorT->target(pos);
+  switch(backend_)
+  {
+    case Backend::Tasks:
+      tasks_error(errorT)->target(pos);
+      break;
+    default:
+      break;
+  }
 }
 
 const Eigen::Vector3d & CoMRelativeBodyTask::target() const
 {
-  return errorT->target();
+  switch(backend_)
+  {
+    case Backend::Tasks:
+      return tasks_error(errorT)->target();
+      break;
+    default:
+      mc_rtc::log::error_and_throw("[CoMRelativeBodyTask] Not implemented for solver backend: {}", backend_);
+  }
+}
+
+const Eigen::Vector3d CoMRelativeBodyTask::actual() const
+{
+  switch(backend_)
+  {
+    case Backend::Tasks:
+      return tasks_error(errorT)->robot().com();
+    default:
+      mc_rtc::log::error_and_throw("[CoMRelativeBodyTask] Not implemented for solver backend: {}", backend_);
+  }
 }
 
 void CoMRelativeBodyTask::reset()
 {
-  const auto & robot = errorT->robot();
-  target(robot.mbc().bodyPosW[errorT->bIndex()].translation() + robot.com());
+  switch(backend_)
+  {
+    case Backend::Tasks:
+      {
+      const auto & err = tasks_error(errorT);
+      const auto & robot = err->robot();
+      target(robots.robot(rIndex).mbc().bodyPosW[bIndex_].translation() + robot.com());
+      }
+      break;
+    default:
+      break;
+  }
 }
 
 void CoMRelativeBodyTask::addToLogger(mc_rtc::Logger & logger)
 {
   Base::addToLogger(logger);
-  logger.addLogEntry(name_ + "_eval", [this]() -> const Eigen::VectorXd & { return errorT->eval(); });
-  logger.addLogEntry(name_ + "_body_pos", [this]() -> const Eigen::Vector3d & { return errorT->robot().mbc().bodyPosW[errorT->bIndex()].translation(); });
-  logger.addLogEntry(name_ + "_com", [this]() { return errorT->robot().com(); });
-  logger.addLogEntry(name_ + "_comTarget", [this]() { return errorT->target(); });
+  logger.addLogEntry(name_ + "_eval", [this]() { return this->eval(); });
+  logger.addLogEntry(name_ + "_body_pos", [this]() -> const Eigen::Vector3d & { return robots.robot(rIndex).mbc().bodyPosW[bIndex_].translation(); });
+  logger.addLogEntry(name_ + "_com", [this]() { return this->actual(); });
+  logger.addLogEntry(name_ + "_comTarget", [this]() { return this->target(); });
 }
 
 void CoMRelativeBodyTask::removeFromLogger(mc_rtc::Logger & logger)
@@ -132,11 +185,11 @@ void CoMRelativeBodyTask::removeFromLogger(mc_rtc::Logger & logger)
 void CoMRelativeBodyTask::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   Base::addToGUI(gui);
-  gui.addElement({"Tasks", name_}, mc_rtc::gui::ArrayInput("relPos", [this]() { return errorT->target(); },
-                                      [this](const Eigen::VectorXd & pos) { errorT->target(pos); }),
-                                   mc_rtc::gui::Point3D("com", [this]() { return errorT->robot().com(); }),
+  gui.addElement({"Tasks", name_}, mc_rtc::gui::ArrayInput("relPos", [this]() { return this->target(); },
+                                      [this](const Eigen::VectorXd & pos) { this->target(pos); }),
+                                   mc_rtc::gui::Point3D("com", [this]() { return this->actual(); }),
                                    mc_rtc::gui::Point3D("target", mc_rtc::gui::PointConfig({0., 1., 0.}, 0.03),
-                                      [this]() { return Eigen::Vector3d(errorT->target() + errorT->robot().mbc().bodyPosW[errorT->bIndex()].translation() ); }));
+                                      [this]() { return Eigen::Vector3d(this->target() + robots.robot(rIndex).mbc().bodyPosW[bIndex_].translation() ); }));
 }
 
 /** This shows how a MetaTask can be registered with the mc_rtc loader */

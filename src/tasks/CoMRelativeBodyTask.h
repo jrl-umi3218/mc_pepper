@@ -73,10 +73,10 @@ namespace mc_pepper
 {
 /** Now that we have a tasks::qp::HighLevelTask we can wrap it in mc_rtc's
  * generic TrajectoryTask wrapper */
-struct CoMRelativeBodyTask : public mc_tasks::TrajectoryTaskGeneric<details::CoMRelativeBodyTask>
+struct CoMRelativeBodyTask : public mc_tasks::TrajectoryTaskGeneric
 {
   // Shortcut name for the base class
-  using Base = mc_tasks::TrajectoryTaskGeneric<details::CoMRelativeBodyTask>;
+  using Base = mc_tasks::TrajectoryTaskGeneric;
 
   CoMRelativeBodyTask(const std::string & body, const mc_rbdyn::Robots & robots, unsigned int robotIndex, double stiffness, double weight);
 
@@ -86,6 +86,10 @@ struct CoMRelativeBodyTask : public mc_tasks::TrajectoryTaskGeneric<details::CoM
 
   const Eigen::Vector3d & target() const;
 
+  const Eigen::Vector3d actual() const;
+
+  const Eigen::Vector3d & bodyPosW() const;
+
   void reset() override;
 
   void addToLogger(mc_rtc::Logger & logger) override;
@@ -93,6 +97,10 @@ struct CoMRelativeBodyTask : public mc_tasks::TrajectoryTaskGeneric<details::CoM
   void addToGUI(mc_rtc::gui::StateBuilder &) override;
 
   void removeFromLogger(mc_rtc::Logger & logger) override;
+
+ protected:
+  std::string body_ = "";
+  unsigned bIndex_ = 0;
 };
 
 } // namespace mc_pepper
