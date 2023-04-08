@@ -104,7 +104,7 @@ CoMRelativeBodyTask::CoMRelativeBodyTask(const std::string & body, const mc_rbdy
   switch(backend_)
   {
     case Backend::Tasks:
-      finalize<details::CoMRelativeBodyTask>(robots, robotIndex, body, init);
+      finalize<Backend::Tasks, details::CoMRelativeBodyTask>(robots, robotIndex, body, init);
       break;
     default:
       mc_rtc::log::error_and_throw("[CoMRelativeBodyTask] Not implemented for solver backend: {}", backend_);
