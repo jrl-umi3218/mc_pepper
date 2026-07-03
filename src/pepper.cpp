@@ -8,18 +8,12 @@
 
 #include <RBDyn/parsers/urdf.h>
 
+#include <mc_rtc/constants.h>
 #include <mc_rtc/logging.h>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
-#include <fstream>
+#include <filesystem>
 
-namespace bfs = boost::filesystem;
-
-#ifndef M_PI
-#  include <boost/math/constants/constants.hpp>
-#  define M_PI boost::math::constants::pi<double>()
-#endif
+namespace fs = std::filesystem;
 
 namespace mc_robots
 {
@@ -285,7 +279,7 @@ void PepperRobotModule::readUrdf(const std::string & robotName,
                                  const std::vector<std::string> & filteredLinks)
 {
   std::string urdfPath = path + "/urdf/" + robotName + ".urdf";
-  if(!bfs::exists(urdfPath))
+  if(!fs::exists(urdfPath))
   {
     mc_rtc::log::error_and_throw("Could not open Pepper model at {}", urdfPath);
   }
@@ -302,7 +296,7 @@ std::map<std::string, std::vector<double>> PepperRobotModule::halfSittingPose(co
       res[j.name()] = halfSitting.at(j.name());
       for(auto & ji : res[j.name()])
       {
-        ji = M_PI * ji / 180;
+        ji = mc_rtc::constants::PI * ji / 180;
       }
     }
     else if(j.name() != "Root" && j.dof() > 0)
@@ -321,8 +315,8 @@ std::map<std::string, std::pair<std::string, std::string>> PepperRobotModule::ge
   std::map<std::string, std::pair<std::string, std::string>> res;
   for(const auto & f : files)
   {
-    bfs::path fpath = bfs::path(convexPath) / (f.second.second + "-ch.txt");
-    if(bfs::exists(fpath))
+    fs::path fpath = fs::path(convexPath) / (f.second.second + "-ch.txt");
+    if(fs::exists(fpath))
     {
       res[f.first] = std::pair<std::string, std::string>(f.second.first, convexPath + f.second.second + "-ch.txt");
     }
